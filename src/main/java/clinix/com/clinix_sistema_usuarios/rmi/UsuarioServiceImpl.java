@@ -14,14 +14,15 @@ import java.rmi.server.UnicastRemoteObject;
 @Service
 public class UsuarioServiceImpl extends UnicastRemoteObject implements UsuarioService {
 
-    @Autowired
-    private MedicoRepository medicoRepository;
+    private final MedicoRepository medicoRepository;
+
+    private final PacienteRepository pacienteRepository;
 
     @Autowired
-    private PacienteRepository pacienteRepository;
-
-    public UsuarioServiceImpl() throws RemoteException {
+    public UsuarioServiceImpl(MedicoRepository medicoRepository, PacienteRepository pacienteRepository) throws RemoteException {
         super();
+        this.medicoRepository = medicoRepository;
+        this.pacienteRepository = pacienteRepository;
     }
 
     @Override
