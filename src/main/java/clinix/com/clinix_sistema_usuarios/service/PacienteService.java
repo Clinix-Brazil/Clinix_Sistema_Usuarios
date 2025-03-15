@@ -18,14 +18,14 @@ public class PacienteService {
 
     private final PacienteRepository pacienteRepository;
 
-    private final RabbitTemplate rabbitTemplate;
-    private static final String EXCHANGE_NAME = "cadastro.exchange";
-    private static final String ROUTING_KEY = "cadastro.novo";
+    //private final RabbitTemplate rabbitTemplate;
+    //private static final String EXCHANGE_NAME = "cadastro.exchange";
+    //private static final String ROUTING_KEY = "cadastro.novo";
 
     @Autowired
     public PacienteService(PacienteRepository pacienteRepository, RabbitTemplate rabbitTemplate){
         this.pacienteRepository = pacienteRepository;
-        this.rabbitTemplate = rabbitTemplate;
+        //this.rabbitTemplate = rabbitTemplate;
     }
 
     public List<Paciente> listarTodos() {
@@ -43,11 +43,12 @@ public class PacienteService {
     public Paciente salvar(Paciente paciente) {
         return this.pacienteRepository.save(paciente);
     }
-
+/*
     public void enviarParaFila(Paciente paciente) {
-        rabbitTemplate.convertAndSend(EXCHANGE_NAME, ROUTING_KEY, paciente);
+        System.out.println("📤 Enviando paciente para a fila...");
+        rabbitTemplate.convertAndSend("fila_usuarios", paciente);
     }
-
+*/
     public Paciente atualizar(Paciente pacienteAtualizado) {
         //Usuario usuario = buscarPorId(id);
         //usuario.atualizar(usuarioAtualizado);
