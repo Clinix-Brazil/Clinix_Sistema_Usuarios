@@ -15,16 +15,27 @@ import org.springframework.context.annotation.Configuration;
 
 @Configuration
 public class RabbitMQConfig {
-
-    PacienteService pacienteService;
-    @RabbitListener(queues = "fila_pacientes")
-    public void consumirMensagem(Paciente paciente) {
-        System.out.println("📥 Consumindo paciente: " + paciente);
-        pacienteService.salvar(paciente);
+    @Bean
+    public Queue pacienteQueue() {
+        return new Queue("myQueue", true); // 'true' torna a fila durável
     }
 
     @Bean
-    public Queue filaPacientes() {
-        return new Queue("fila_pacientes", true);
+    public Jackson2JsonMessageConverter jsonMessageConverter() {
+        return new Jackson2JsonMessageConverter();
     }
+
+    @Bean
+    public RabbitTemplate rabbitTemplate(ConnectionFactory connectionFactory, Jackson2JsonMessageConverter converter) {
+        RabbitTemplate rabbitTemplate = new RabbitTemplate(connectionFactory);
+        rabbitTemplate.setMessageConverter(converter);
+        return rabbitTemplate;
+    }
+    /*
+    @Bean
+    public Queue queue() {
+        return new Queue("myQueue", true); // Nome da fila deve ser o mesmo do produtor
+    }
+
+     */
 }
