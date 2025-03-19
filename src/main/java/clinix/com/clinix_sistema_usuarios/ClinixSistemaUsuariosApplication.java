@@ -20,7 +20,7 @@ public class ClinixSistemaUsuariosApplication {
         ApplicationContext context = SpringApplication.run(ClinixSistemaUsuariosApplication.class, args);
         usuarioService = context.getBean(UsuarioServiceImpl.class);
         try {
-            Registry registry = LocateRegistry.createRegistry(1099);
+            Registry registry = LocateRegistry.getRegistry(1099);
             registry.rebind("UsuarioService", usuarioService);
             System.out.println("Serviço RMI de Usuários registrado com sucesso!");
         } catch (Exception e) {
