@@ -3,6 +3,7 @@ package clinix.com.clinix_sistema_usuarios.controller;
 import clinix.com.clinix_sistema_usuarios.model.User;
 import clinix.com.clinix_sistema_usuarios.repository.UserRepository;
 import clinix.com.clinix_sistema_usuarios.service.JwtService;
+import clinix.com.clinix_sistema_usuarios.service.UserService; // Import UserService
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -33,6 +34,9 @@ public class AuthController {
 
     @Autowired
     private JwtService jwtService;
+
+    @Autowired
+    private UserService userService; // Inject UserService
 
     @PostMapping("/register")
     public ResponseEntity<?> register(@RequestBody Map<String, String> registrationData) {
@@ -70,13 +74,8 @@ public class AuthController {
         }
 
         User user = userRepository.findByUsername(username).orElseThrow();
-        String jwtToken = jwtService.generateToken(userDetailsService.loadUserByUsername(username)); // Corrected line
+        String jwtToken = jwtService.generateToken(userService.userDetailsService().loadUserByUsername(username)); // Corrected line
 
         return ResponseEntity.ok(Map.of("token", jwtToken));
     }
-
-    @Autowired
-    private org.springframework.security.core.userdetails.UserDetailsService userDetailsService; // inject
-                                                                                                 // UserDetailsService
-
 }

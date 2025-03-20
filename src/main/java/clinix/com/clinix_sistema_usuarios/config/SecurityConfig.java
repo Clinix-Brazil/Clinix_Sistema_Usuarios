@@ -30,19 +30,19 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-                .csrf(AbstractHttpConfigurer::disable) // Disable CSRF protection
+                .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/api/auth/**").permitAll() // Permit access to authentication endpoints
-                        .requestMatchers("/api/admin/**").hasRole("ADMIN") // Example: Require ADMIN role for
-                                                                           // /api/admin/**
-                        .anyRequest().authenticated() // Require authentication for all other requests
+                        .requestMatchers("/clinixSistemaUsuarios/paciente/save").permitAll()
+                        .requestMatchers("/clinixSistemaUsuarios/medico/save").permitAll()
+                        .requestMatchers("/clinixSistemaUsuarios/gerente/save").permitAll()
+                        .requestMatchers("/api/auth/**").permitAll() // Permitir acesso ao controller de autenticação
+                        .anyRequest().authenticated()
                 )
                 .sessionManagement(session -> session
-                        .sessionCreationPolicy(SessionCreationPolicy.STATELESS) // Configure session management to be
-                                                                                // stateless (JWT based)
+                        .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 )
                 .authenticationProvider(authenticationProvider())
-                .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class); // Add JWT filter
+                .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
         return http.build();
     }
 

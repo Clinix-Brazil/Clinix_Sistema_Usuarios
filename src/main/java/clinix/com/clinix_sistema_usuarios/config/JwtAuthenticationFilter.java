@@ -27,31 +27,39 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     @Autowired
     private UserService userService;
 
+    private static final String[] PUBLIC_URLS = {
+            "/clinixSistemaUsuarios/paciente/save",
+            "/clinixSistemaUsuarios/medico/save",
+            "/clinixSistemaUsuarios/gerente/save",
+            "/api/auth/**"
+    };
+
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
             throws ServletException, IOException {
+
+        if (isPublicUrl(request)) {
+            filterChain.doFilter(request, response);
+            return;
+        }
 
         final String authHeader = request.getHeader("Authorization");
         final String jwt;
         final String username;
 
-        if (StringUtils.isEmpty(authHeader)
-                || !org.apache.commons.lang3.StringUtils.startsWith(authHeader, "Bearer ")) {
+        if (StringUtils.isEmpty(authHeader) || !authHeader.startsWith("Bearer ")) {
             filterChain.doFilter(request, response);
             return;
         }
 
-        jwt = authHeader.substring(7); // Extract JWT from header
-
+        jwt = authHeader.substring(7);
         username = jwtService.extractUsername(jwt);
 
-        if (org.apache.commons.lang3.StringUtils.isNotEmpty(username)
-                && SecurityContextHolder.getContext().getAuthentication() == null) {
+        if (StringUtils.isNotEmpty(username) && SecurityContextHolder.getContext().getAuthentication() == null) {
             UserDetails userDetails = userService.userDetailsService().loadUserByUsername(username);
 
             if (jwtService.isTokenValid(jwt, userDetails)) {
                 SecurityContext context = SecurityContextHolder.createEmptyContext();
-
                 UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
                         userDetails, null, userDetails.getAuthorities());
 
@@ -62,5 +70,15 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             }
         }
         filterChain.doFilter(request, response);
+    }
+
+    private boolean isPublicUrl(HttpServletRequest request) {
+        String requestURI = request.getRequestURI();
+        for (String url : PUBLIC_URLS) {
+            if (requestURI.equals(url)) { // Use equals() para correspondência exata
+                return true;
+            }
+        }
+        return false;
     }
 }

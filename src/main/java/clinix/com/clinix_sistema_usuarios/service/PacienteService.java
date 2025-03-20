@@ -7,6 +7,8 @@ import clinix.com.clinix_sistema_usuarios.model.Paciente;
 import clinix.com.clinix_sistema_usuarios.repository.PacienteRepository;
 import org.springframework.amqp.core.AmqpTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -40,8 +42,9 @@ public class PacienteService {
         return this.pacienteRepository.findPacienteRmiDTOById(id);
     }
 
-    public Paciente salvar(Paciente paciente) {
-        return this.pacienteRepository.save(paciente);
+    public ResponseEntity<?> salvar(Paciente paciente) {
+        Paciente pacienteSalvo = this.pacienteRepository.save(paciente);
+        return new ResponseEntity<>(pacienteSalvo, HttpStatus.CREATED);
     }
 /*
     public void enviarParaFila(Paciente paciente) {
