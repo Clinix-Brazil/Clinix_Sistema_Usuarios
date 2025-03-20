@@ -32,7 +32,7 @@ public class SecurityConfig {
         http
                 .csrf(AbstractHttpConfigurer::disable) // Disable CSRF protection
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/api/auth/**").permitAll() // Permit access to authentication endpoints
+                        .requestMatchers("/api/auth/**","/paciente/save").permitAll() // Permit access to authentication endpoints
                         .requestMatchers("/api/admin/**").hasRole("ADMIN") // Example: Require ADMIN role for
                                                                            // /api/admin/**
                         .anyRequest().authenticated() // Require authentication for all other requests
