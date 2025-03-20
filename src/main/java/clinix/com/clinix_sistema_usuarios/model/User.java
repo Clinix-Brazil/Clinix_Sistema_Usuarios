@@ -38,12 +38,10 @@ public class User {
     }
 
     public String getName() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getName'");
+        return this.username;
     }
 
     public void setRoles(Set<String> roles) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getName'");
+        this.roles = roles = roles;
     }
 }

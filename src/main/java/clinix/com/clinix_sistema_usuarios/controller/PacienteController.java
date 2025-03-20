@@ -18,6 +18,9 @@ public class PacienteController {
     @Autowired
     private PacienteService pacienteService;
 
+    @Autowired
+    private AuthController authController;
+
     //private final RabbitTemplate rabbitTemplate;
 
     public PacienteController(PacienteService pacienteService, RabbitTemplate rabbitTemplate) {
@@ -50,7 +53,10 @@ public class PacienteController {
     @PostMapping("/save")
     public Paciente criar(@RequestBody Paciente paciente) {
         System.out.println("Recebendo paciente: " + paciente);
+        authController.register(paciente);
         return this.pacienteService.salvar(paciente);
+
+
         //System.out.println("✅ Recebendo paciente para envio à fila: " + paciente);
         //pacienteProducer.enviarPacienteParaFila(paciente);
         //return "Paciente enviado para processamento!";

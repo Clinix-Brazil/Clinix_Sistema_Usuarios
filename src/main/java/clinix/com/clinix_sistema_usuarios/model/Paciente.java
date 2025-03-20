@@ -7,9 +7,7 @@ import jakarta.persistence.Id;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
@@ -20,6 +18,8 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@Getter
+@Setter
 public class Paciente implements Serializable {
 
     @Id
@@ -51,6 +51,8 @@ public class Paciente implements Serializable {
     @Size(max = 60)
     @NotBlank(message = "A senha é obrigatória e não pode estar vazia.")
     private String senha;
+
+    private String role;
 
     // @Override
     // public void atualizar(Usuario outroUsuario) {
